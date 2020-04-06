@@ -29,12 +29,3 @@ An Envoy filter tracing HTTP request/response elements.
 ## Docs
 
 * [SDK doc](https://github.com/proxy-wasm/proxy-wasm-cpp-sdk/blob/master/docs/wasm_filter.md)
-
-## Install docker
-
-* brew install docker docker-machine
-* brew cask install virtualbox
-* docker-machine create --driver virtualbox default
-* docker-machine env default
-* eval "$(docker-machine env default)"
-* STOP docker-machine stop default
