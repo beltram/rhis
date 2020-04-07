@@ -7,6 +7,7 @@ use log::info;
 use proxy_wasm::traits::*;
 use proxy_wasm::types::*;
 use crate::config::RhisConfig;
+use wasm_bindgen::__rt::core::fmt::{Display, Formatter, Error};
 
 mod config;
 
@@ -58,39 +59,39 @@ impl HttpContext for Rhis {
 
     fn on_http_request_headers(&mut self, _num_headers: usize) -> Action {
         self.request_headers = Some(self.get_http_request_headers());
-        // self.get_http_request_headers().iter()
-        //     .for_each(|(k, v)| info!("-> {}: {}", k, v));
         Action::Continue
     }
 
     fn on_http_request_body(&mut self, body_size: usize, _end_of_stream: bool) -> Action {
         self.request_body = self.get_http_request_body(0, body_size);
-        // if let Some(body) = self.get_http_request_body(0, body_size) {
-        //     if let Ok(body) = from_utf8(body.as_slice()) {
-        //         info!("-> {:?}", body);
-        //     }
-        // }
         Action::Continue
     }
 
     fn on_http_response_headers(&mut self, _num_headers: usize) -> Action {
         self.response_headers = Some(self.get_http_response_headers());
-        // self.get_http_response_headers().iter()
-        //     .for_each(|(k, v)| info!("<- {}: {}", k, v));
         Action::Continue
     }
 
     fn on_http_response_body(&mut self, body_size: usize, _end_of_stream: bool) -> Action {
         self.response_body = self.get_http_response_body(0, body_size);
-        // if let Some(body) = self.get_http_response_body(0, body_size) {
-        //     if let Ok(body) = from_utf8(body.as_slice()) {
-        //         info!("<- {:?}", body);
-        //     }
-        // }
         Action::Continue
     }
 
     fn on_log(&mut self) {
-        info!("Rhis on log");
+        info!("{}", self);
+    }
+}
+
+impl Display for Rhis {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        let req_body = self.request_body.as_ref()
+            .and_then(|it| from_utf8(it.as_slice()).ok())
+            .map(|it| format!("-> {}\n", it))
+            .unwrap_or_else(|| "".to_string());
+        let resp_body = self.response_body.as_ref()
+            .and_then(|it| from_utf8(it.as_slice()).ok())
+            .map(|it| format!("<- {}\n", it))
+            .unwrap_or_else(|| "".to_string());
+        write!(f, "{}{}", req_body, resp_body)
     }
 }

@@ -6,7 +6,7 @@ wasme build precompiled -t webassemblyhub.io/$WASME_USER/rhis:$1 ./target/wasm32
 echo "Pushing image to webassemblyhub.io"
 wasme push webassemblyhub.io/$WASME_USER/rhis:$1
 echo "Clearing existing filters"
-wasme undeploy istio --id=rhis --namespace bookinfo
-sleep 5
+#wasme undeploy istio --id=rhis --namespace bookinfo
+#sleep 5
 echo "Deploying image to namespace 'bookinfo'"
 wasme deploy istio webassemblyhub.io/$WASME_USER/rhis:$1 --id=rhis --namespace bookinfo

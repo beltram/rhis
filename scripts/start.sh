@@ -11,8 +11,8 @@ echo "Starting bookinfo"
 kubectl create ns bookinfo
 kubectl label namespace bookinfo istio-injection=enabled --overwrite
 kubectl apply -n bookinfo -f ./bookinfo/bookinfo.yaml
-kubectl exec $(kubectl get pod --selector app=details --output jsonpath='{.items[0].metadata.name}') -c istio-proxy -- curl -X POST http://localhost:15000/logging?level=info
 echo "Waiting for bookinfo deployment..."
 sleep 40
+kubectl exec $(kubectl get pod --selector app=details --output jsonpath='{.items[0].metadata.name}') -c istio-proxy -- curl -X POST http://localhost:15000/logging?level=info
 echo "Deploying rhis filter"
 sh build.sh $1
