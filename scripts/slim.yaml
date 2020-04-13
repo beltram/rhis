@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rhis
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: rhis
+              servicePort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rhis
+  labels:
+    app: rhis
+    service: rhis
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: rhis
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rhis
+  labels:
+    account: rhis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rhis
+  labels:
+    app: rhis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rhis
+  template:
+    metadata:
+      labels:
+        app: rhis
+    spec:
+      serviceAccountName: rhis
+      containers:
+      - name: rhis
+        image: registry.local:5000/rhis_actix
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080

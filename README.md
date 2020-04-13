@@ -21,6 +21,7 @@ An Envoy filter tracing HTTP request/response elements.
     
 ## Demo
 * `cd scripts`
+* `k3d create --enable-registry --publish 8081:80`
 * Bootstrap cluster `sh start.sh`
 * curl details service `sh ping.sh`
 * `kubectl logs details-<..> -c istio-proxy`
