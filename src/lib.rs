@@ -33,7 +33,7 @@ impl HttpContext for Rhis {
     }
 
     fn on_http_response_headers(&mut self, _num_headers: usize) -> Action {
-        self.set_http_response_header("Powered-By", Some("rhis-3"));
+        // self.set_http_response_header("Powered-By", Some("SBCP"));
         Action::Continue
     }
 
@@ -63,6 +63,6 @@ impl Rhis {
             .map(|(k, v)| format!("<- {}::{}", k, v))
             .collect::<Vec<String>>()
             .join("\n");
-        info!("#{}\n{}{}", self.context_id, req_headers, resp_headers);
+        // info!("#{}\n{}{}", self.context_id, req_headers, resp_headers);
     }
 }
